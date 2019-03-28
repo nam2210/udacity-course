@@ -119,8 +119,9 @@ class _ConverterRouteState extends State<ConverterRoute> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Create the 'input' group of widgets. This is a Column that
+    // Create the 'input' group of widgets. This is a Column that
     // includes the input value, and 'from' unit [Dropdown].
+
     Widget inputWidget = Padding(
         padding: _padding,
         child: Column(
@@ -176,7 +177,7 @@ class _ConverterRouteState extends State<ConverterRoute> {
 
     //Return the input, arrows, and output widgets, wrapped in a Column.
     Padding convertWidget = Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: _padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
