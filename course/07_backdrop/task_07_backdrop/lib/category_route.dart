@@ -3,10 +3,14 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:backdrop/backdrop.dart';
+import 'package:task_07_backdrop/backdrop.dart';
+import 'package:task_07_backdrop/unit_converter.dart';
 
 import 'category.dart';
 import 'category_tile.dart';
 import 'unit.dart';
+
 
 final _backgroundColor = Colors.green[100];
 
@@ -25,8 +29,10 @@ class CategoryRoute extends StatefulWidget {
 }
 
 class _CategoryRouteState extends State<CategoryRoute> {
-  // TODO: Keep track of a default [Category], and the currently-selected
+  //Keep track of a default [Category], and the currently-selected
   // [Category]
+  Category _defaultCategory;
+  Category _currentCategory;
   final _categories = <Category>[];
   static const _categoryNames = <String>[
     'Length',
@@ -77,7 +83,7 @@ class _CategoryRouteState extends State<CategoryRoute> {
   @override
   void initState() {
     super.initState();
-    // TODO: Set the default [Category] for the unit converter that opens
+    //Set the default [Category] for the unit converter that opens
     for (var i = 0; i < _categoryNames.length; i++) {
       _categories.add(Category(
         name: _categoryNames[i],
@@ -85,12 +91,24 @@ class _CategoryRouteState extends State<CategoryRoute> {
         iconLocation: Icons.cake,
         units: _retrieveUnitList(_categoryNames[i]),
       ));
+      if (i == 0){
+        _defaultCategory = Category(
+          name: _categoryNames[0],
+          color: _baseColors[0],
+          iconLocation: Icons.cake,
+          units: _retrieveUnitList(_categoryNames[0]),
+        );
+      }
     }
   }
 
-  // TODO: Fill out this function
+  //Fill out this function
   /// Function to call when a [Category] is tapped.
-  void _onCategoryTap(Category category) {}
+  void _onCategoryTap(Category category) {
+    setState(() {
+      _currentCategory = category;
+    });
+  }
 
   /// Makes the correct number of rows for the list view.
   ///
@@ -120,7 +138,7 @@ class _CategoryRouteState extends State<CategoryRoute> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Import and use the Backdrop widget
+    //Import and use the Backdrop widget
     final listView = Container(
       color: _backgroundColor,
       padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -140,9 +158,14 @@ class _CategoryRouteState extends State<CategoryRoute> {
       backgroundColor: _backgroundColor,
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: listView,
+    return Backdrop(
+      currentCategory: _currentCategory == null ? _defaultCategory : _currentCategory,
+      frontTitle: Text('Unit converter'),
+      backTitle: Text('Select a convert'),
+      backPanel: listView,
+      frontPanel:  _currentCategory == null
+          ? UnitConverter(category: _defaultCategory)
+          : UnitConverter(category: _currentCategory),
     );
   }
 }
