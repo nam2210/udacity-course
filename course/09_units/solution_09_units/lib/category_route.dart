@@ -94,9 +94,9 @@ class _CategoryRouteState extends State<CategoryRoute> {
       throw ('Data retrieved from API is not a Map');
     }
     var categoryIndex = 0;
-    data.keys.forEach((key) {
+    for (var key in data.keys){
       final List<Unit> units =
-          data[key].map<Unit>((dynamic data) => Unit.fromJson(data)).toList();
+      data[key].map<Unit>((dynamic data) => Unit.fromJson(data)).toList();
 
       var category = Category(
         name: key,
@@ -111,7 +111,25 @@ class _CategoryRouteState extends State<CategoryRoute> {
         _categories.add(category);
       });
       categoryIndex += 1;
-    });
+    }
+//    data.keys.forEach((key) {
+//      final List<Unit> units =
+//          data[key].map<Unit>((dynamic data) => Unit.fromJson(data)).toList();
+//
+//      var category = Category(
+//        name: key,
+//        units: units,
+//        color: _baseColors[categoryIndex],
+//        iconLocation: Icons.cake,
+//      );
+//      setState(() {
+//        if (categoryIndex == 0) {
+//          _defaultCategory = category;
+//        }
+//        _categories.add(category);
+//      });
+//      categoryIndex += 1;
+//    });
   }
 
   /// Function to call when a [Category] is tapped.

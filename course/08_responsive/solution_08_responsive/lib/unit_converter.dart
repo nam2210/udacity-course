@@ -265,7 +265,6 @@ class _UnitConverterState extends State<UnitConverter> {
           } else {
             return Center(
               child: Container(
-                width: 450.0,
                 child: converter,
               ),
             );

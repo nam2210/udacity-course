@@ -255,7 +255,42 @@ class _UnitConverterState extends State<UnitConverter> {
 
     return Padding(
       padding: _padding,
-      child: converter,
+      child: OrientationBuilder(builder: (BuildContext context, Orientation orientation){
+        if (orientation == Orientation.portrait){
+          return SingleChildScrollView(
+            child: converter,
+          );
+        } else {
+          return SingleChildScrollView(
+            child: Center(
+              child: Container(
+                width: 450.0,
+                child: converter,
+              ),
+            ),
+          );
+        }
+      }),
     );
+//    return Padding(
+//      padding: _padding,
+//      child: LayoutBuilder(builder:(BuildContext context, BoxConstraints constraints){
+//          if (constraints.maxHeight > constraints.maxWidth){
+//            return SingleChildScrollView(
+//              child: converter,
+//            );
+//          } else {
+//            return SingleChildScrollView(
+//              child: Center(
+//                child: Container(
+//                  width: 450,
+//                  child: converter,
+//                ),
+//              ),
+//            );
+//          }
+//      }),
+//    );
+
   }
 }

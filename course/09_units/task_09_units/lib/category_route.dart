@@ -84,35 +84,35 @@ class _CategoryRouteState extends State<CategoryRoute> {
   ];
 
   // TODO: Remove the overriding of initState(). Instead, we use
-  // didChangeDependencies()
-  @override
-  void initState() {
-    super.initState();
-    for (var i = 0; i < _categoryNames.length; i++) {
-      var category = Category(
-        name: _categoryNames[i],
-        color: _baseColors[i],
-        iconLocation: Icons.cake,
-        units: _retrieveUnitList(_categoryNames[i]),
-      );
-      if (i == 0) {
-        _defaultCategory = category;
-      }
-      _categories.add(category);
-    }
-  }
+//  // didChangeDependencies()
+//  @override
+//  void initState() {
+//    super.initState();
+//    for (var i = 0; i < _categoryNames.length; i++) {
+//      var category = Category(
+//        name: _categoryNames[i],
+//        color: _baseColors[i],
+//        iconLocation: Icons.cake,
+//        units: _retrieveUnitList(_categoryNames[i]),
+//      );
+//      if (i == 0) {
+//        _defaultCategory = category;
+//      }
+//      _categories.add(category);
+//    }
+//  }
 
   // TODO: Uncomment this out. We use didChangeDependencies() so that we can
   // wait for our JSON asset to be loaded in (async).
-  //  @override
-  //  Future<void> didChangeDependencies() async {
-  //    super.didChangeDependencies();
-  //    // We have static unit conversions located in our
-  //    // assets/data/regular_units.json
-  //    if (_categories.isEmpty) {
-  //      await _retrieveLocalCategories();
-  //    }
-  //  }
+    @override
+    Future<void> didChangeDependencies() async {
+      super.didChangeDependencies();
+      // We have static unit conversions located in our
+      // assets/data/regular_units.json
+      if (_categories.isEmpty) {
+        await _retrieveLocalCategories();
+      }
+    }
 
   /// Retrieves a list of [Categories] and their [Unit]s
   Future<void> _retrieveLocalCategories() async {
@@ -122,10 +122,27 @@ class _CategoryRouteState extends State<CategoryRoute> {
         .of(context)
         .loadString('assets/data/regular_units.json');
     final data = JsonDecoder().convert(await json);
-    if (data is! Map) {
-      throw ('Data retrieved from API is not a Map');
+    //Create Categories and their list of Units, from the JSON asset
+    int categoryIndex = 0;
+    for (var key in data.keys){
+      if (data is! Map) {
+        throw ('Data retrieved from API is not a Map');
+      }
+      final List<Unit> units = data[key].map<Unit>((dynamic d) => Unit.fromJson(d)).toList();
+      //final List<Unit> units = data[key].map<Unit>((dynamic data) => Unit.fromJson(data)).toList();
+      var category = Category(
+        name: key,
+        units: units,
+        color: _baseColors[categoryIndex],
+        iconLocation: Icons.cake
+      );
+      setState(() {
+        if (categoryIndex == 0){
+          _defaultCategory = category;
+        }
+        _categories.add(category);
+      });
     }
-    // TODO: Create Categories and their list of Units, from the JSON asset
   }
 
   /// Function to call when a [Category] is tapped.
