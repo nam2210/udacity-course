@@ -7,6 +7,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:task_11_api/api.dart';
 
 import 'category.dart';
 import 'unit.dart';
@@ -103,11 +104,17 @@ class _UnitConverterState extends State<UnitConverter> {
 
   // TODO: If in the Currency [Category], call the API to retrieve the conversion.
   // Remember, the API call is an async function.
-  void _updateConversion() {
-    setState(() {
-      _convertedValue =
-          _format(_inputValue * (_toValue.conversion / _fromValue.conversion));
+  Future<void> _updateConversion() async {
+    var api = Api();
+    api.convert(widget.category.name, _inputValue.toString(),
+        _fromValue.name, _toValue.name).then((result){
+      setState(() {
+        _convertedValue = result.toString();
+      });
+    }, onError: (e){
+          print(e);
     });
+
   }
 
   void _updateInputValue(String input) {
